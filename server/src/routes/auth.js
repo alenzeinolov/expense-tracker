@@ -18,6 +18,17 @@ const generateToken = (user) => {
   });
 };
 
+const createTokenResponse = async (user) => {
+  const token = await generateToken(user);
+  return {
+    token,
+    user: {
+      id: user.id,
+      username: user.username,
+    },
+  };
+};
+
 router.post("/login", async (req, res) => {
   const user = await User.findOne({ where: { username: req.body.username } });
 
@@ -40,18 +51,12 @@ router.post("/login", async (req, res) => {
     });
   }
 
-  const token = await generateToken(user);
-
-  res.json({
-    status: "success",
-    data: {
-      token,
-      ...user,
-    },
-  });
+  const data = await createTokenResponse(user);
+  res.json(data);
 });
 
 router.post("/register", async (req, res) => {
+  console.log("i am here");
   let user = await User.findOne({ where: { username: req.body.username } });
   if (user) {
     return res.status(400).json({
@@ -62,18 +67,11 @@ router.post("/register", async (req, res) => {
     });
   }
 
-  hash = await argon2.hash(req.body.password);
+  const hash = await argon2.hash(req.body.password);
   user = await User.create({ username: req.body.username, password: hash });
 
-  const token = await generateToken(user);
-
-  return res.json({
-    status: "success",
-    data: {
-      token,
-      ...user,
-    },
-  });
+  const data = await createTokenResponse(user);
+  res.json(data);
 });
 
-export default Router;
+export default router;
