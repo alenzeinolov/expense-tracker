@@ -8,8 +8,7 @@ import Auth from "./components/Auth";
 import Layout from "./components/Layout";
 import Login from "./components/Login";
 import Register from "./components/Register";
-import Tracker from "./components/Tracker";
-import AuthContext from "./contexts/AuthContext";
+import Expenses from "./components/Expenses";
 
 function App() {
   return (
@@ -24,7 +23,7 @@ function App() {
               <Register />
             </Route>
             <Route path="/" exact>
-              <Tracker />
+              <Expenses />
             </Route>
           </Switch>
         </Layout>
