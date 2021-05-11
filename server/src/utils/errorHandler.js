@@ -1,6 +1,6 @@
 import APIError from "./APIError";
 
-const errorHandler = (err, _, res) => {
+const errorHandler = (err, req, res, next) => {
   if (err instanceof APIError) {
     return res.status(err.statusCode).json({
       status: err.status,
